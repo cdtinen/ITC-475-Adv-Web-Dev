@@ -20,12 +20,33 @@ header {
     background-color: #add8e6;
     grid-row: 1 / span 1;
     display: grid;
+    grid-template-columns: 3, 1fr;
     width: 100%;
 }
 .logo {
     width: 20%;
     height: 100%;
     align-self: center;
+    grid-column: 1 / span 1;
+}
+#welcome {
+    margin-right: 1em;
+    grid-column: 3 / span 1;
+    align-self: center;
+
+}
+#welcome img {
+    margin-left: 0.5em;
+    height: 80px;
+    width: 80px;
+}
+#welcome h4 {
+    padding: 0;
+    margin: 0;
+}
+#time {
+    grid-column: 3 / span 1;
+    margin-bottom: 0.25em;
 }
 #separator {
     grid-area: separator;
