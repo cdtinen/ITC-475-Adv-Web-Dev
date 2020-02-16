@@ -38,14 +38,14 @@ function Welcome() {
     // change sun or moon image
     if (hours >= 6 && hours <= 18) {
         if(hours == 18 && mins >= 1) {
-            img = "./assets/moon.png"
+            img = "assets/moon.png"
         }
         else {
-            img = "./assets/sun.png"
+            img = "assets/sun.png"
         }
     }
     else {
-        img = "./assets/moon.png"
+        img = "assets/moon.png"
     }
     
     
