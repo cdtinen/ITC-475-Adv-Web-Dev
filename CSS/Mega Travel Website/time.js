@@ -3,10 +3,11 @@ function updateClock() {
     let twelvetime = now.getHours() 
     let ampm = "am"
 
-    if (twelvetime > 12) {
-        twelvetime -= 12
+    if (twelvetime >= 12) {
+        if (twelvetime > 12) {twelvetime -= 12}
         ampm = "pm"
     }
+    else {ampm = "am"}
     
     
     let time = "Time: " + twelvetime + ':' + now.getMinutes() + ":" + now.getSeconds() + " " + ampm
