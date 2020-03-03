@@ -14,8 +14,6 @@
     <div class="wrapper">
         <header>
             <img class="logo" src="assets/mega travel logo.png" alt="Mega Travel">
-            <div id="welcome"></div>
-            <div id="time"></div>
         </header>
 
         <span id="separator"></span>
@@ -28,9 +26,13 @@
 
         <article>
             <h1>Contact an Agent</h1>
-            <p>We would love to know more about your travel plans. Please fill out this contact form to get in touch with a travel agent.
-            </p>
+            <p>We would love to know more about your travel plans. Please fill out this contact form to get in touch with a travel agent.</p>
+            <br>
+            <p style="margin-left: 10em;">Select a destination below for a list of associated activities!</p>
         </article>
+
+        
+        <div id="activity_form"></div>
 
         <footer>
             <span>Copyright Protected. All rights reserved.</span><br><br>
@@ -38,6 +40,11 @@
             <span>mega@travels.com</span>
         </footer>
     </div>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel" src="activities.js"></script>
     
     </body>
 </html>

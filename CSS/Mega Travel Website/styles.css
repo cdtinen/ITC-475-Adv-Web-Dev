@@ -121,6 +121,24 @@ article {
 .package4 {
     grid-column: 4 / span 1;
 }
+#activity_form {
+    width: 40em;
+    place-self: center;
+}
+.activity-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.activity-list {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+}
+.divider {
+    width: 40px;
+    height: 1px;
+}
 footer {
     grid-area: footer;
     background-color: black;

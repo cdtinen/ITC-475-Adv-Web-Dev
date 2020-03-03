@@ -11,6 +11,16 @@ function updateClock() {
     
     
     let time = "Time: " + twelvetime + ':' + now.getMinutes() + ":" + now.getSeconds() + " " + ampm
+
+    if (now.getMinutes() < 10 && now.getSeconds() < 10) {
+        time = "Time: " + twelvetime + ':0' + now.getMinutes() + ":0" + now.getSeconds() + " " + ampm
+    } 
+    else if (now.getMinutes() < 10 && now.getSeconds() >= 10) {
+        time = "Time: " + twelvetime + ':0' + now.getMinutes() + ":" + now.getSeconds() + " " + ampm
+    }
+    else if (now.getSeconds() < 10 && now.getMinutes() >= 10) {
+        time = "Time: " + twelvetime + ':' + now.getMinutes() + ":0" + now.getSeconds() + " " + ampm
+    }
     document.getElementById("time").innerHTML = [time];
 
     // call this function again in 1000ms
