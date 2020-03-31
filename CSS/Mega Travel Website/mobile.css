@@ -65,3 +65,6 @@ article {
     grid-row: 4 / span 1;
     grid-column: 1 / span 4;
 }
+#contact_form {
+    justify-self: flex-start;
+}

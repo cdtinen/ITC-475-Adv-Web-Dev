@@ -1,6 +1,6 @@
 const locations = [
     {id: "nz", text: "New Zealand"}, {id: "md", text: "Maldives, South Asia"}, 
-    {id: "it", text: "Venice, Italy"}, {id: "cn", text: "Cancun"}
+    {id: "it", text: "Venice, Italy"}, {id: "cn", text: "Cancun, Mexico"}
 ]
 const nz_activities = [
     {
@@ -106,7 +106,7 @@ const md_activities = [
 function ActivityButton(props) {
     return (
         <div className="activity-button">
-            <button onClick={() => props.handleClick(props.location.id)}>
+            <button onClick={() => props.handleClick(props.location.id, event)}>
                 {props.location.text}
             </button>
             <div className="divider"></div>
@@ -156,7 +156,8 @@ class Activities extends React.Component {
         })
     }
 
-    handleClick(loc_id) {
+    handleClick(loc_id, event) {
+        event.preventDefault()
         if (loc_id === "nz") {
             this.setState({activities: nz_activities})
         }
@@ -194,4 +195,132 @@ class Activities extends React.Component {
     }
 }
 
-ReactDOM.render(<Activities />, document.getElementById('activity_form'))
+class ContactForm extends React.Component {
+    constructor() {
+        super()
+        this.state = {
+            firstName: "",
+            lastName: "",
+            emailAddress: "",
+            phoneNumber: "",
+            numAdults: '',
+            numChildren: '',
+            travelDate: ""
+        }
+
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleReset = this.handleReset.bind(this)
+    }
+    
+    handleChange(event) {
+        const {name, value, type} = event.target
+        this.setState({
+            [name]: value
+        })
+    }
+
+    handleSubmit(event) {
+        event.preventDefault()
+        var boxes = 0
+        var actList = document.getElementsByClassName("activity-item")
+        for(let i = 0; i < actList.length; i++) {
+            var actChild = actList[i].firstChild
+            if(actChild.checked) {
+                boxes++
+            }
+        }
+        console.log(boxes)
+        if (boxes == 0) {
+            alert("Please select a destination and at least one activity")
+        }
+        else {alert("Form submitted!")}
+    }
+
+    handleReset() {
+        this.setState({
+            firstName: "",
+            lastName: "",
+            emailAddress: "",
+            phoneNumber: "",
+            numAdults: '',
+            numChildren: '',
+            travelDate: ""
+        })
+    }
+
+    render() {
+        return (
+            <form id="base_form" name="contactForm" onSubmit={this.handleSubmit} onReset={this.handleReset}>
+                <label>First Name&emsp;</label>
+                <input
+                    type="text"
+                    value={this.state.firstName}
+                    name="firstName"
+                    placeholder="First Name"
+                    onChange={this.handleChange} 
+                    required    />
+                <br></br><label>Last Name&emsp;</label>
+                <input
+                    type="text"
+                    value={this.state.lastName}
+                    name="lastName"
+                    placeholder="Last Name"
+                    onChange={this.handleChange} 
+                    required    />
+                <br></br><label>Email Address&emsp;</label>
+                <input
+                    type="email"
+                    value={this.state.emailAddress}
+                    name="emailAddress"
+                    placeholder="E-mail Address"
+                    onChange={this.handleChange} 
+                    required    />
+                <br></br><label>Phone Number&emsp;</label>
+                <input
+                    type="tel"
+                    value={this.state.phoneNumber}
+                    name="phoneNumber"
+                    placeholder="9999999999"
+                    pattern="[0-9]{10}"
+                    onChange={this.handleChange} 
+                    required    />
+                <br></br><label>Adults Traveling&emsp;</label>
+                <input
+                    type="number"
+                    value={this.state.numAdults}
+                    name="numAdults"
+                    placeholder="Number of Adults"
+                    onChange={this.handleChange} 
+                    required    />
+                <br></br><label>Children Traveling&emsp;</label>
+                <input
+                    type="number"
+                    value={this.state.numChildren}
+                    name="numChildren"
+                    placeholder="Number of Children"
+                    onChange={this.handleChange} 
+                    required    />
+                <br></br><label>Desired Date of Travel&emsp;</label>
+                <input
+                    type="date"
+                    value={this.state.travelDate}
+                    name="travelDate"
+                    onChange={this.handleChange} 
+                    required    />
+                <br></br><br></br>
+                <p>Select the destination and activities you are interested in below:</p>
+                <Activities />
+                <input
+                    type="submit"
+                    name="submit"
+                    value="Submit"/>
+                <input
+                    type="reset" 
+                    style={{marginLeft: "1em"}}/>
+            </form>
+        )
+    }
+}
+
+ReactDOM.render(<ContactForm />, document.getElementById('contact_form'))

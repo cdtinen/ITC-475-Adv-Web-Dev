@@ -80,7 +80,8 @@ nav a:hover {
 article {
     grid-area: article;
     width: 50%;
-    padding-bottom: 1em;
+    padding: 1em;
+    line-height: 150%;
 }
 .packages {
     grid-area: packages;
@@ -121,9 +122,17 @@ article {
 .package4 {
     grid-column: 4 / span 1;
 }
-#activity_form {
-    width: 40em;
-    place-self: center;
+#contact_form {
+    display: flex;
+    margin: 0.75em;
+    padding: 0 1em 1em 1em;
+    flex-flow: column wrap;
+    width: 35em;
+    justify-self: center;
+}
+#contact_form input {
+    padding: 0.5em;
+    margin: 0.5em 0.5em 0.5em 0;
 }
 .activity-buttons {
     display: flex;
@@ -147,6 +156,6 @@ footer {
     padding-bottom: 0.75em;
 }
 footer span {
-    margin-left: 3em;
+    margin-left: 2em;
     color: white;
 }
