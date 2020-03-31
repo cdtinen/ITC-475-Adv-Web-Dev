@@ -230,7 +230,6 @@ class ContactForm extends React.Component {
                 boxes++
             }
         }
-        console.log(boxes)
         if (boxes == 0) {
             alert("Please select a destination and at least one activity")
         }
