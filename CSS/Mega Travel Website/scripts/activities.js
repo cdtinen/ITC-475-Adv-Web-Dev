@@ -103,6 +103,19 @@ const md_activities = [
 
 ]
 
+let nz_acts = []
+let md_acts = []
+let it_acts = []
+let cn_acts = []
+for (let i = 0; i < nz_activities.length; i++) {
+    nz_acts.push(nz_activities[i].text)
+    md_acts.push(md_activities[i].text)
+}
+for (let i = 0; i < it_activities.length; i++) {
+    it_acts.push(it_activities[i].text)
+    cn_acts.push(cn_activities[i].text)
+}
+
 function ActivityButton(props) {
     return (
         <div className="activity-button">
@@ -212,7 +225,7 @@ class ContactForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleReset = this.handleReset.bind(this)
     }
-    
+
     handleChange(event) {
         const {name, value, type} = event.target
         this.setState({
@@ -222,18 +235,63 @@ class ContactForm extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault()
-        var boxes = 0
+
+        var form = document.getElementById("base_form")
+        let formData = new FormData(base_form);
+
         var actList = document.getElementsByClassName("activity-item")
+        var boxes = []
+        var activities = []
+        var destination = ""
+
         for(let i = 0; i < actList.length; i++) {
             var actChild = actList[i].firstChild
+            activities.push(actList[i].innerText)
             if(actChild.checked) {
-                boxes++
+                boxes.push(actList[i].innerText)
             }
         }
-        if (boxes == 0) {
+
+        if (boxes.length == 0) {
             alert("Please select a destination and at least one activity")
         }
-        else {alert("Form submitted!")}
+
+        else {
+            switch(activities.toString()) {
+                case nz_acts.toString():
+                    destination = "New Zealand"
+                    break;
+                case md_acts.toString():
+                    destination = "Maldives, South Asia"
+                    break;
+                case it_acts.toString():
+                    destination = "Venice, Italy"
+                    break;
+                case cn_acts.toString():
+                    destination = "Cancun, Mexico"
+                    break;
+            }
+            formData.append('destination', destination)
+
+            for(let j = 0; j < boxes.length; j++) {
+                formData.append('activity' + j, boxes[j])
+            }
+
+            axios({
+                method: 'post',
+                url: 'confirm.php',
+                data: formData,
+                config: { headers: {'Content-Type': 'multipart/form-data' }}
+            })
+            .then(function (response) {
+                //handle success
+                location.href = "confirm.php"
+            })
+            .catch(function (response) {
+                //handle error
+                console.log(response)
+            });
+        }
     }
 
     handleReset() {
@@ -250,7 +308,8 @@ class ContactForm extends React.Component {
 
     render() {
         return (
-            <form id="base_form" name="contactForm" onSubmit={this.handleSubmit} onReset={this.handleReset}>
+            <form id="base_form" name="contactForm" onReset={this.handleReset} 
+            action="scripts/confirm.php" method="post">
                 <label>First Name&emsp;</label>
                 <input
                     type="text"
@@ -313,7 +372,8 @@ class ContactForm extends React.Component {
                 <input
                     type="submit"
                     name="submit"
-                    value="Submit"/>
+                    value="Submit"
+                    onClick={e => this.handleSubmit(e)}/>
                 <input
                     type="reset" 
                     style={{marginLeft: "1em"}}/>
