@@ -83,6 +83,14 @@ article {
     padding: 1em;
     line-height: 150%;
 }
+#adminforms {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100vw !important;
+}
+#adminforms div {
+    padding: 1%;
+}
 .packages {
     grid-area: packages;
     display: grid;

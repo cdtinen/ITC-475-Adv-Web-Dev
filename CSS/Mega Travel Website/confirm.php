@@ -31,7 +31,6 @@ session_start();
         <?php
             $fName = $lName = $email = $phone = $adults = $children = $date = $destination = "";
 
-
             if($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["fName"] = $_POST["firstName"];
                 $_SESSION["lName"] = $_POST["lastName"];
@@ -41,16 +40,92 @@ session_start();
                 $_SESSION["children"] = $_POST["numChildren"];
                 $_SESSION["date"] = $_POST["travelDate"];
                 $_SESSION["destination"] = $_POST["destination"];
-                $_SESSION["activity0"] = $_POST["activity0"];
-                if(!empty($_POST["activity1"])) {$_SESSION["activity1"] = $_POST["activity1"];}
-                if(!empty($_POST["activity2"])) {$_SESSION["activity2"] = $_POST["activity2"];}
-                if(!empty($_POST["activity3"])) {$_SESSION["activity3"] = $_POST["activity3"];}
-                if(!empty($_POST["activity4"])) {$_SESSION["activity4"] = $_POST["activity4"];}
+                $_SESSION["activities"] = $_POST["activity0"];
+                if(!empty($_POST["activity1"])) {$_SESSION["activities"] = $_SESSION["activities"] . ", " . $_POST["activity1"];}
+                if(!empty($_POST["activity2"])) {$_SESSION["activities"] = $_SESSION["activities"] . ", " . $_POST["activity2"];}
+                if(!empty($_POST["activity3"])) {$_SESSION["activities"] = $_SESSION["activities"] . ", " . $_POST["activity3"];}
+                if(!empty($_POST["activity4"])) {$_SESSION["activities"] = $_SESSION["activities"] . ", " . $_POST["activity4"];}
             }
+            
+            function console_log($data) {
+                echo '<script>';
+                echo 'console.log('. json_encode($data) .')';
+                echo '</script>';            
+            }
+
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $database = "travelDB";
+            
+            // Create connection
+            $conn = new mysqli($servername, $username, $password);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Create DB if it doesn't exist and check for success
+            $sql = "CREATE DATABASE IF NOT EXISTS travelDB";
+            if ($conn->query($sql) === TRUE) {
+                console_log("DB success");
+            }
+            else {
+                echo "Error creating DB: " . $conn->error;
+            }
+
+            // Close connection
+            $conn->close();
+
+            // Create new connection to new DB
+            $conn = new mysqli($servername, $username, $password, $database);
+
+            // Create table if it doesn't exist
+            $sql = "CREATE TABLE IF NOT EXISTS myClients (
+                id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                firstname VARCHAR(30) NOT NULL,
+                lastname VARCHAR(30) NOT NULL,
+                email VARCHAR(50),
+                phone VARCHAR(15),
+                adults INT(2),
+                children INT(2),
+                traveldate VARCHAR(20),
+                destination VARCHAR(50),
+                activities VARCHAR(100)
+                )";
+
+            // Check table success
+            if ($conn->query($sql) === TRUE) {
+                console_log("Table success");
+            }
+            else {
+                echo "Error creating table: " . $conn->error;
+            }
+
+            // Insert query
+            $sql = "INSERT INTO myClients (firstname, lastname, email, phone, adults, children, traveldate, destination, activities)
+                VALUES('$_SESSION[fName]', '$_SESSION[lName]', '$_SESSION[email]', '$_SESSION[phone]', '$_SESSION[adults]',
+                '$_SESSION[children]', '$_SESSION[date]', '$_SESSION[destination]', '$_SESSION[activities]')";
+
+            // Only insert after form submission
+            if($_SERVER["REQUEST_METHOD"] == "POST") {
+                if ($conn->query($sql) === TRUE) {
+                    console_log("Insert success");
+                }
+                else {
+                    echo "Insert failed: " . $conn->error;
+                }
+            }
+
+            // Close connection
+            $conn->close();
         ?>
 
         <article>
-            <h2>Thank you for submitting your travel agent contact request! Here is the information you submitted:</h1>
+            <h2>Thank you for submitting your travel agent contact request, <?php echo $_SESSION["fName"];?>! 
+                Here is the information you submitted:
+            </h2>
 
             <p>
                 Client Name: <?php echo $_SESSION["fName"]; echo "&nbsp;"; echo $_SESSION["lName"]; ?>
@@ -67,15 +142,7 @@ session_start();
                 <br>
                 Travel Date: <?php echo $_SESSION["date"];?>
                 <br>
-                Interested Activities: 
-                <?php 
-                    echo $_SESSION["activity0"];
-                    echo "&nbsp;";
-                    if(!empty($_SESSION["activity1"])) {echo $_SESSION["activity1"]; echo "&nbsp;";}
-                    if(!empty($_SESSION["activity2"])) {echo $_SESSION["activity2"]; echo "&nbsp;";}
-                    if(!empty($_SESSION["activity3"])) {echo $_SESSION["activity3"]; echo "&nbsp;";}
-                    if(!empty($_SESSION["activity4"])) {echo $_SESSION["activity4"];}
-                ?>
+                Interested Activities: <?php echo $_SESSION["activities"];?>
                 <br>
             </p>
 
